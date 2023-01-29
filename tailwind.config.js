@@ -41,7 +41,7 @@ module.exports = {
           "6px 6px 10px -1px rgba(0,0,0,0.15), -1px -1px 10px -1px rgba(255,255,255,0.7)",
       },
       gridTemplateColumns: {
-        auto: "repeat(auto-fill,minmax(18rem,1fr))",
+        auto: "repeat(auto-fill,minmax(10rem,1fr))",
       },
     },
     screens: {

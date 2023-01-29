@@ -1,7 +1,9 @@
 import type {NextPage} from "next";
 
-import {Alchemy, Network} from "alchemy-sdk";
+import {Alchemy, Network, TokenBalancesResponse} from "alchemy-sdk";
 import {FormEventHandler, useEffect, useRef, useState} from "react";
+
+import {TokenItem} from "@/Components";
 
 const settings = {
   apiKey: "oqn6yIU_bcHgkSNXEycAv-Ikr5OYRdP-",
@@ -10,6 +12,8 @@ const settings = {
 
 const Home: NextPage = () => {
   const [value, setValue] = useState("");
+  const [tokenBalances, setTokenBalances] =
+    useState<TokenBalancesResponse | null>(null);
   const alchemySDKRef = useRef<Alchemy | undefined>();
 
   useEffect(() => {
@@ -24,9 +28,17 @@ const Home: NextPage = () => {
       return;
     }
 
-    alchemySDKRef.current.core
-      .getTokenBalances(value)
-      .then(console.log);
+    alchemySDKRef.current.core.getTokenBalances(value).then((res) => {
+      const {tokenBalances} = res;
+      const tokenBalancesNonZero = tokenBalances.filter(
+        (token) => token.tokenBalance! !== "0",
+      );
+
+      setTokenBalances({
+        ...res,
+        tokenBalances: tokenBalancesNonZero,
+      });
+    });
   };
 
   return (
@@ -43,6 +55,18 @@ const Home: NextPage = () => {
           onChange={(e) => setValue(e.target.value)}
         />
       </form>
+      <ul className="grid grid-cols-auto gap-5">
+        {tokenBalances &&
+          tokenBalances.tokenBalances.map((token) => {
+            return (
+              <TokenItem
+                key={token.contractAddress}
+                address={token.contractAddress}
+                balance={token.tokenBalance as string}
+              />
+            );
+          })}
+      </ul>
     </section>
   );
 };
