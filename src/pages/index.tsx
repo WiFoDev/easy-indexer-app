@@ -1,44 +1,19 @@
 import type {NextPage} from "next";
 
-import {Alchemy, Network, TokenBalancesResponse} from "alchemy-sdk";
-import {FormEventHandler, useEffect, useRef, useState} from "react";
+import {FormEventHandler, useState} from "react";
 
-import {TokenItem} from "@/Components";
-
-const settings = {
-  apiKey: "oqn6yIU_bcHgkSNXEycAv-Ikr5OYRdP-",
-  network: Network.ETH_MAINNET,
-};
+import {TokenList} from "@/Components";
 
 const Home: NextPage = () => {
-  const [value, setValue] = useState("");
-  const [tokenBalances, setTokenBalances] =
-    useState<TokenBalancesResponse | null>(null);
-  const alchemySDKRef = useRef<Alchemy | undefined>();
-
-  useEffect(() => {
-    if (!alchemySDKRef.current) {
-      alchemySDKRef.current = new Alchemy(settings);
-    }
-  }, []);
+  const [address, setAddress] = useState("");
+  const [enabled, setEnabled] = useState(false);
 
   const submitHandler: FormEventHandler = (e) => {
     e.preventDefault();
-    if (value.trim().length === 0 || !alchemySDKRef.current) {
+    if (address.trim().length === 0) {
       return;
     }
-
-    alchemySDKRef.current.core.getTokenBalances(value).then((res) => {
-      const {tokenBalances} = res;
-      const tokenBalancesNonZero = tokenBalances.filter(
-        (token) => token.tokenBalance! !== "0",
-      );
-
-      setTokenBalances({
-        ...res,
-        tokenBalances: tokenBalancesNonZero,
-      });
-    });
+    setEnabled(true);
   };
 
   return (
@@ -51,22 +26,11 @@ const Home: NextPage = () => {
           className="w-full rounded-xl p-3 text-background outline-none"
           placeholder="Enter a valid address"
           type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
         />
       </form>
-      <ul className="grid grid-cols-auto gap-5">
-        {tokenBalances &&
-          tokenBalances.tokenBalances.map((token) => {
-            return (
-              <TokenItem
-                key={token.contractAddress}
-                address={token.contractAddress}
-                balance={token.tokenBalance as string}
-              />
-            );
-          })}
-      </ul>
+      {enabled && <TokenList address={address} />}
     </section>
   );
 };
