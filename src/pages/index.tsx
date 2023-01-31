@@ -1,10 +1,12 @@
 import type {NextPage} from "next";
 
-import {FormEventHandler, useState} from "react";
+import {FormEventHandler, useEffect, useState} from "react";
+import {useAccount} from "wagmi";
 
 import {TokenList} from "@/Components";
 
 const Home: NextPage = () => {
+  const {address: connectedAddress} = useAccount();
   const [address, setAddress] = useState("");
   const [enabled, setEnabled] = useState(false);
 
@@ -15,6 +17,14 @@ const Home: NextPage = () => {
     }
     setEnabled(true);
   };
+
+  useEffect(() => {
+    if (!connectedAddress) {
+      return;
+    }
+    setAddress(connectedAddress);
+    setEnabled(true);
+  }, [connectedAddress]);
 
   return (
     <section className="flex flex-col items-center gap-10">
