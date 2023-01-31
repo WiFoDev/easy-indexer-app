@@ -27,10 +27,13 @@ const Home: NextPage = () => {
           placeholder="Enter a valid address"
           type="text"
           value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={(e) => {
+            setAddress(e.target.value);
+            setEnabled(false);
+          }}
         />
       </form>
-      {enabled && <TokenList address={address} />}
+      {<TokenList address={address} enabled={enabled} />}
     </section>
   );
 };

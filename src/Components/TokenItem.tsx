@@ -1,6 +1,8 @@
-import {Alchemy, Network, TokenMetadataResponse} from "alchemy-sdk";
-import Image from "next/image";
 import React, {FC, useEffect, useRef, useState} from "react";
+import Image from "next/image";
+import {Alchemy, Network, TokenMetadataResponse} from "alchemy-sdk";
+
+import genericCrypto from "@/assets/generic-cryptocurrency.svg";
 
 const settings = {
   apiKey: "oqn6yIU_bcHgkSNXEycAv-Ikr5OYRdP-",
@@ -37,7 +39,7 @@ export const TokenItem: FC<TokenItemProps> = ({address, balance}) => {
         <Image
           alt={`${data.name} logo`}
           layout="fill"
-          src={data.logo as string}
+          src={data.logo ?? genericCrypto}
         />
       </div>
       <p>

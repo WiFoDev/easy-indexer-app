@@ -9,6 +9,9 @@ const alchemy = new Alchemy(settings);
 
 export const getTokenBalance = async (address: string) => {
   const data = await alchemy.core.getTokenBalances(address);
+  const tokensBalanceNonZero = data.tokenBalances.filter(
+    (token) => BigInt(token.tokenBalance as string) !== BigInt("0"),
+  );
 
-  return data;
+  return tokensBalanceNonZero;
 };

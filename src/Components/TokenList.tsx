@@ -6,17 +6,18 @@ import {TokenItem} from "./TokenItem";
 
 interface TokenListProps {
   address: string;
+  enabled: boolean;
 }
 
-export const TokenList: FC<TokenListProps> = ({address}) => {
-  const {data, isLoading} = useTokenBalances(address);
+export const TokenList: FC<TokenListProps> = ({address, enabled}) => {
+  const {data, isFetching} = useTokenBalances(address, enabled);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isFetching) return <div>Loading...</div>;
 
   return (
     <ul className="grid grid-cols-auto gap-5">
       {data &&
-        data.tokenBalances.map((token) => {
+        data.map((token) => {
           return (
             <TokenItem
               key={token.contractAddress}
