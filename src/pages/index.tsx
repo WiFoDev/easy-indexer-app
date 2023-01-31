@@ -27,8 +27,8 @@ const Home: NextPage = () => {
   }, [connectedAddress]);
 
   return (
-    <section className="flex flex-col items-center gap-10">
-      <h1 className="mt-10 max-w-3xl text-center text-6xl font-bold">
+    <section className="flex flex-col items-center gap-16">
+      <h1 className="mt-20 max-w-3xl text-center text-6xl font-bold">
         The best way to track your tokens
       </h1>
       <form className="w-1/2" onSubmit={submitHandler}>
