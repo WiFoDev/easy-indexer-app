@@ -1,5 +1,6 @@
 import React, {FC} from "react";
 import Image from "next/image";
+import {Ring} from "@uiball/loaders";
 
 import {useTokenBalances} from "@/Hooks";
 import warningIcon from "@/assets/warning.svg";
@@ -14,7 +15,12 @@ interface TokenListProps {
 export const TokenList: FC<TokenListProps> = ({address, enabled}) => {
   const {data, isFetching} = useTokenBalances(address, enabled);
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isFetching)
+    return (
+      <div>
+        <Ring color="white" />
+      </div>
+    );
   if (data?.length === 0)
     return (
       <div className="flex w-1/3 flex-col items-center gap-2 rounded-lg border-2 border-secondary bg-[#f8d7da] p-4 text-center text-xl text-[#721c24] shadow-md shadow-secondary/30">
@@ -27,7 +33,7 @@ export const TokenList: FC<TokenListProps> = ({address, enabled}) => {
     );
 
   return (
-    <ul className="grid grid-cols-auto gap-5">
+    <ul className="grid w-3/4 grid-cols-auto gap-5">
       {data &&
         data.map((token) => {
           return (
